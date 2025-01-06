@@ -1,9 +1,15 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
+from requests import Response
 from post.forms import LoginForm, PostForm, RegisterForm
 from post.models import Post
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import Post
+from django.contrib.auth.models import User
 
 # Create your views here.
 @login_required
@@ -90,3 +96,23 @@ def register_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
+@api_view(['GET'])
+def data_view(request):
+    posts = Post.objects.all()
+    data = []
+    for post in posts:
+        user = User.objects.get(id=post.user_id)
+        data.append({
+            'post': {
+                'title': post.title,
+                'image': post.image.url if post.image else None,  # Eğer resim yoksa bir URL dönmesi için boş string at.
+                'content': post.content,
+                'created_at': post.created_at,
+            },
+            'user': {
+                'username': user.username,
+                'email': user.email,
+            }
+        })
+    return Response(data)
+    
