@@ -1,0 +1,13 @@
+{% extends "post/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h2>Çıkış Yapıldı</h2>
+            <p>Başarıyla çıkış yaptınız.</p>
+            <a href="{% url 'login' %}" class="btn btn-primary">Tekrar Giriş Yap</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
